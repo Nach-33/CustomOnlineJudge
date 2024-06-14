@@ -3,6 +3,7 @@ const ErrorResponse = require("../../utils/ErrorResponse");
 const asyncHandler = require("../../middlewares/asyncHandler");
 const { fileUpload } = require("../../config/firebaseConfig");
 const Question = require("../../models/Question");
+const Admin = require("../../models/Admin");
 
 exports.checkAddQuestionRequest = [
   body("title")
@@ -25,6 +26,7 @@ exports.checkAddQuestionRequest = [
 ];
 
 exports.addQuestion = asyncHandler(async (req, res) => {
+  const admin_id = req.auth_user.static_id;
   const { title, content } = req.body;
   const solution_file = req.files.solution_file[0];
 
@@ -34,8 +36,19 @@ exports.addQuestion = asyncHandler(async (req, res) => {
   const question = await Question.create({
     title: title,
     content: content,
-    solution_file: file_url
+    solution_file: file_url,
   });
 
-  return res.json({ message: "Question Added Successfully"});
+  await Admin.findOneAndUpdate(
+    {
+      _id: admin_id,
+    },
+    {
+      $push: {
+        questions_created: { question_id: question._id },
+      },
+    }
+  );
+
+  return res.json({ message: "Question Added Successfully" });
 });

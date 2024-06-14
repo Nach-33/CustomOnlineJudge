@@ -3,6 +3,7 @@ const asyncHandler = require("./asyncHandler");
 const jwt = require("jsonwebtoken");
 const Admin = require("../models/Admin");
 const User = require("../models/User");
+const ErrorResponse = require('../utils/ErrorResponse');
 require("dotenv").config();
 
 exports.checkAuthorizationHeaders = [
