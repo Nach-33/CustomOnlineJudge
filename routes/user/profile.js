@@ -7,36 +7,26 @@ const {
   validateRequestBody,
   checkMongoId,
 } = require("../../middlewares/validateRequestBody");
-const { getUserProfile } = require("../../controllers/user/profile");
+const { getUserProfile, checkChangeHandleRequest, changeHandle, getAllUsers } = require("../../controllers/user/profile");
 
 const router = express.Router({ mergeParams: true });
 
-router.route("/id/:user_id").get(
-  checkAuthorizationHeaders,
-  validateRequestBody,
-  authenticateUser,
-  checkMongoId("user_id"),
-  validateRequestBody,
-
+router.route("/handle/:handle").get(
   getUserProfile
 );
 
-// router.route("/all").get(
-//   checkAuthorizationHeaders,
-//   validateRequestBody,
-//   authenticateAdmin,
+router.route("/all").get(
+  getAllUsers
+);
 
-//   getAllAdmins
-// );
+router.route("/handle").patch(
+  checkAuthorizationHeaders,
+  validateRequestBody,
+  authenticateUser,
+  checkChangeHandleRequest,
+  validateRequestBody,
 
-// router.route("/handle").patch(
-//   checkAuthorizationHeaders,
-//   validateRequestBody,
-//   authenticateAdmin,
-//   checkChangeHandleRequest,
-//   validateRequestBody,
-
-//   changeHandle
-// );
+  changeHandle
+);
 
 module.exports = router;

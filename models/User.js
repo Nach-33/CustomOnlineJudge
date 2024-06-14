@@ -31,6 +31,14 @@ const UserSchema = mongoose.Schema(
         },
       },
     ],
+    questions_attempted: [
+      {
+        question_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Question",
+        },
+      },
+    ],
     questions_solved: [
       {
         question_id: {
