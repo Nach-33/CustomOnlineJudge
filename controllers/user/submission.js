@@ -49,7 +49,13 @@ exports.submitFile = asyncHandler(async (req, res) => {
         return res.status(500).json({message: err.message})
       }
     });
-    
+    await fs.promises.unlink("./a.out", (err) => {
+      if(err){
+        console.log(err.message);
+        return res.status(500).json({message: err.message})
+      }
+    });
+
     return res.json({ message: "working" });
   } catch (error) {
     console.log(error.message);

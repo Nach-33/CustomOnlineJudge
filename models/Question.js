@@ -5,6 +5,7 @@ const QuestionSchema = mongoose.Schema(
     title: {
       type: String,
       required: true,
+      unique: true
     },
     content: {
       type: String,
@@ -12,6 +13,14 @@ const QuestionSchema = mongoose.Schema(
     },
     solution_file: {
       type: String,
+      required: true,
+    },
+    input_file: {
+      type: String,
+      required: true,
+    },
+    time_limit: {
+      type: Number,
       required: true,
     },
   },

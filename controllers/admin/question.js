@@ -17,9 +17,16 @@ exports.checkAddQuestionRequest = [
       return true;
     }),
   body("content").exists().withMessage("Question Content is Required").bail(),
+  body("time_limit").exists().withMessage("Question Time Limit is Required").bail(),
   body().custom((value, { req }) => {
     if (!req.files?.solution_file?.length) {
       throw new ErrorResponse("Solution File is Required");
+    }
+    return true;
+  }),
+  body().custom((value, { req }) => {
+    if (!req.files?.input_file?.length) {
+      throw new ErrorResponse("Input File is Required");
     }
     return true;
   }),
@@ -27,16 +34,21 @@ exports.checkAddQuestionRequest = [
 
 exports.addQuestion = asyncHandler(async (req, res) => {
   const admin_id = req.auth_user.static_id;
-  const { title, content } = req.body;
+  const { title, content, time_limit } = req.body;
   const solution_file = req.files.solution_file[0];
+  const input_file = req.files.input_file[0];
 
-  const file_title = title.split(" ").join("_") + Date.now() + ".txt";
-  const file_url = fileUpload(solution_file, file_title);
+  const solution_file_title = title.split(" ").join("_") + "_sol" + ".txt";
+  const solution_file_url = fileUpload(solution_file, solution_file_title);
+  const input_file_title = title.split(" ").join("_") + "_in" + ".txt";
+  const input_file_url = fileUpload(input_file, input_file_title);
 
   const question = await Question.create({
     title: title,
     content: content,
-    solution_file: file_url,
+    solution_file: solution_file_url,
+    input_file: input_file_url,
+    time_limit: time_limit
   });
 
   await Admin.findOneAndUpdate(
