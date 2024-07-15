@@ -1,13 +1,14 @@
 const express = require("express");
 const {
   checkAuthorizationHeaders,
-  authenticateAdmin,
+  authenticateUser,
 } = require("../../middlewares/authenticate");
 const {
   validateRequestBody,
   checkMongoId,
 } = require("../../middlewares/validateRequestBody");
-const { submitFile } = require("../../controllers/admin/submission");
+const { submitFile, checkSubmitRequest } = require("../../controllers/user/submission");
+const upload = require("../../config/multerUpload");
 const router = express.Router({ mergeParams: true });
 
 router
@@ -15,7 +16,13 @@ router
   .post(
     checkAuthorizationHeaders,
     validateRequestBody,
-    authenticateAdmin,
+    authenticateUser,
+
+    upload.fields([{name: "submission_file", maxCount: 1}]),
+
+    checkSubmitRequest,
+    validateRequestBody,
+
     submitFile
   );
 
