@@ -2,6 +2,16 @@ const mongoose = require("mongoose");
 
 const SubmissionSchema = mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true
+    },
+    question: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Question",
+      required: true
+    },
     score: {
       type: Number,
       detault: 0,
@@ -9,10 +19,6 @@ const SubmissionSchema = mongoose.Schema(
     penalty: {
       type: Number,
       detault: 0,
-    },
-    status: {
-      type: Number,
-      enum: [0, 1],
     },
     message: {
       type: String,
@@ -22,18 +28,6 @@ const SubmissionSchema = mongoose.Schema(
         "Runtime Error",
         "Wrong Answer",
       ],
-    },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-    question: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Question",
-    },
-    contest: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Contest",
     },
   },
   { timestamps: true }
