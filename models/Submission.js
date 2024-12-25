@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 
 const SubmissionSchema = mongoose.Schema(
   {
-    user: {
+    user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true
     },
-    question: {
+    question_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Question",
       required: true
@@ -20,13 +20,14 @@ const SubmissionSchema = mongoose.Schema(
       type: Number,
       detault: 0,
     },
-    message: {
+    status: {
       type: String,
       enum: [
-        "Accepted",
-        "Time Limit Exceeded",
-        "Runtime Error",
-        "Wrong Answer",
+        "ACCEPTED",
+        "COMPILATION ERROR",
+        "TIME LIMIT EXCEEDED",
+        "RUNTIME ERROR",
+        "WRONG ANSWER",
       ],
     },
   },
